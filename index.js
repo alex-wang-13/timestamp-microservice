@@ -33,6 +33,17 @@ var listener = app.listen(process.env.PORT || 3000, function () {
 
 
 
+// Handles empty query
+app.get("/api", (req, res) => {
+  var date = new Date();
+  res.json({
+    "unix": date.getTime(),
+    "utc": date.toUTCString()
+  });
+});
+
+
+
 // Handles non-empty query param
 app.get("/api/:date", (req, res) => {
   const query = req.params.date;
