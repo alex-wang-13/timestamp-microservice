@@ -32,11 +32,22 @@ var listener = app.listen(process.env.PORT || 3000, function () {
 });
 
 
-app.get("/api/:date", (req, res) => {
-  const date = new Date(req.params.date);
 
-  res.json({
-    "unix": date.getTime(),
-    "utc": date.toDateString()
-  });
+// Handles non-empty query param
+app.get("/api/:date", (req, res) => {
+  const query = req.params.date;
+  if (isNaN(Number(query))) {
+    var date = new Date(query);
+  } else {
+    var date = new Date(Number(query));
+  }
+
+  if (isNaN(date)) {
+    res.json({"error": "Invalid Date"});
+  } else {
+    res.json({
+      "unix": date.getTime(),
+      "utc": date.toUTCString()
+    });
+  }
 });
